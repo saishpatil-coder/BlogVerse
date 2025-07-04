@@ -30,6 +30,31 @@ export class Service {
             console.log("Appwrite serive :: updatePost :: error", error)
         }
     }
+    // Check if the user has liked the post
+    async hasUserLiked(postId, userId) {
+        const post = await this.databases.getDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, postId);
+        return post.likedBy?.includes(userId);
+    }
+
+    // Like or unlike post
+    async likePost(postId, userId) {
+        const post = await this.databases.getDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, postId);
+
+        if (post.likedBy?.includes(userId)) {
+            // Unlike
+            const updatedLikedBy = post.likedBy.filter(id => id !== userId);
+            return await this.databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, postId, {
+                likedBy: updatedLikedBy,
+            });
+        } else {
+            // Like
+            const updatedLikedBy = [...(post.likedBy || []), userId];
+            return await this.databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, postId, {
+                likedBy: updatedLikedBy,
+            });
+        }
+    }
+
     async deletePost({ slug }) {
         let documentId = slug
         try {
@@ -52,7 +77,7 @@ export class Service {
             return false;
         }
     }
-    async getPosts(queries = [Query.equal("status","active")]) {
+    async getPosts(queries = [Query.equal("status", "active")]) {
         try {
             return await this.databases.listDocuments(
                 conf.appwriteDatabaseId,
@@ -60,12 +85,12 @@ export class Service {
                 queries,
             )
         } catch (error) {
-            console.log("Appwrite serive :: getPosts :: error",error)
-            return false ;
+            console.log("Appwrite serive :: getPosts :: error", error)
+            return false;
         }
     }
     //file upload 
-    async uploadFile(file){
+    async uploadFile(file) {
         try {
             return await this.bucket.createFile(
                 conf.appwriteBucketId,
@@ -73,11 +98,11 @@ export class Service {
                 file
             )
         } catch (error) {
-            console.log("Appwrite serive :: uploadFile :: error",error)
-            return false ;
+            console.log("Appwrite serive :: uploadFile :: error", error)
+            return false;
         }
     }
-    async deleteFile(fileId){
+    async deleteFile(fileId) {
         try {
             await this.bucket.deleteFile(
                 conf.appwriteBucketId,
@@ -85,13 +110,13 @@ export class Service {
             )
             return true;
         } catch (error) {
-            console.log("Appwrite serive :: deleteFile  Q :: error",error)
+            console.log("Appwrite serive :: deleteFile  Q :: error", error)
             return false
         }
     }
-    getFilePreview(fileId){
+    getFilePreview(fileId) {
         return this.bucket.getFileView(
-            conf.appwriteBucketId,fileId
+            conf.appwriteBucketId, fileId
         )
     }
 

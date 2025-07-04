@@ -1,12 +1,11 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './App.jsx'
 import './index.css'
 import { store } from './store/store.js'
-import { Protected } from './components/index.js'
-import {Home , LoginPage , SignUpPage , AllPosts,AddPost , EditPost , Post, Profile} from "./pages/index.js"
+import { Protected } from './components'
+import {Home , LoginPage , SignUpPage , AddPost , EditPost , Post, Profile, AuthorPage, Verify} from "./pages"
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,15 +31,7 @@ const router = createBrowserRouter([
           </Protected>
         ),
       },
-      {
-        path: "/all-posts",
-        element: (
-          <Protected authentication>
-            {" "}
-            <AllPosts />
-          </Protected>
-        ),
-      },
+     
       {
         path: "/add-post",
         element: (
@@ -70,6 +61,14 @@ const router = createBrowserRouter([
             <Profile />
           </Protected>
         ),
+      },
+      {
+        path: "/author/:userId",
+        element: <AuthorPage />,
+      },
+      {
+        path: "/verify",
+        element: <Verify />,
       },
     ],
   },

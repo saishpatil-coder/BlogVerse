@@ -40,7 +40,14 @@ export class AuthService{
             throw error;
         }
     }
-
+    async sendVerificationEmail(redirectUrl) {
+        try {
+            return await this.account.createVerification(redirectUrl);
+        } catch (error) {
+            console.log("Appwrite service :: sendVerificationEmail :: error", error);
+            throw error;
+        }
+    }
 }
 
 const authService = new AuthService();
