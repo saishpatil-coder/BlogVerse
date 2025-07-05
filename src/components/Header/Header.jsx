@@ -13,64 +13,76 @@ export default function Header() {
 
   const navItems = [
     { name: 'Home', slug: '/', active: true },
+    { name: 'All Posts', slug: '/all-posts', active: true },
+    { name: 'About', slug: '/about', active: true },
     { name: 'Add Post', slug: '/add-post', active: authStatus },
-    { name: 'Login', slug: '/login', active: !authStatus },
-    { name: 'Sign Up', slug: '/signup', active: !authStatus },
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 shadow-lg">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
       <Container>
-        <nav className="flex items-center justify-between py-4 relative">
-
+        <nav className="flex items-center justify-between py-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <Logo width="40px" />
-            <span className="text-2xl font-extrabold text-white drop-shadow-sm group-hover:text-gray-300 transition-all duration-300">
+          <Link to="/" className="flex items-center gap-3 group">
+            <Logo width="32px" />
+            <span className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
               MegaBlog
             </span>
           </Link>
 
-          {/* Desktop Nav */}
-          <ul className="hidden md:flex items-center gap-4">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-8">
             {navItems.map((item, i) =>
               item.active && (
-                <li key={i}>
-                  <Link
-                    to={item.slug}
-                    className={`relative px-5 py-2 rounded-full text-sm font-semibold flex items-center gap-1 transition-all duration-300 focus:outline-none focus-visible:ring-2
-                    ${location.pathname === item.slug
-                      ? 'bg-white text-gray-900 shadow after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-2/3 after:h-1 after:bg-gray-700 after:rounded-full'
-                      : 'text-gray-200 hover:bg-gray-700/50 hover:shadow-md hover:scale-105'}`}
-                  >
-                    {item.name}
-                  </Link>
-                </li>
+                <Link
+                  key={i}
+                  to={item.slug}
+                  className={`text-sm font-medium transition-colors ${
+                    location.pathname === item.slug
+                      ? 'text-blue-600'
+                      : 'text-gray-600 hover:text-blue-600'
+                  }`}
+                >
+                  {item.name}
+                </Link>
               )
             )}
-            {authStatus && (
-              <li className="relative group">
-                <Link
-                  to="/profile"
-                  className="w-10 h-10 rounded-full bg-white text-gray-800 font-bold flex items-center justify-center shadow ring-2 ring-white hover:ring-4 transition-all duration-300"
-                  aria-label="Profile"
-                >
-                  {avatar}
-                </Link>
-                <span className="absolute top-full left-1/2 -translate-x-1/2 mt-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity z-50">
-                  Profile
-                </span>
-              </li>
-            )}
-          </ul>
+          </div>
 
-          {/* Mobile Toggle */}
+          {/* Auth Section */}
+          <div className="hidden md:flex items-center gap-4">
+            {authStatus ? (
+              <Link
+                to="/profile"
+                className="w-8 h-8 rounded-full bg-blue-600 text-white font-medium flex items-center justify-center text-sm hover:bg-blue-700 transition-colors"
+              >
+                {avatar}
+              </Link>
+            ) : (
+              <div className="flex items-center gap-3">
+                <Link
+                  to="/login"
+                  className="text-sm text-gray-600 hover:text-blue-600 transition-colors"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 rounded-full bg-white/10 hover:bg-white/20 text-white focus:outline-none focus:ring-2 focus:ring-white"
+            className="md:hidden p-2 text-gray-600 hover:text-blue-600 transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation"
           >
-            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {mobileMenuOpen ? (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
               ) : (
@@ -78,45 +90,59 @@ export default function Header() {
               )}
             </svg>
           </button>
-
-          {/* Mobile Menu */}
-          {mobileMenuOpen && (
-            <>
-              <div className="absolute top-full mt-3 right-0 w-64 bg-gray-900 rounded-xl shadow-2xl z-50 p-4 animate-slide-in space-y-3 border border-gray-700">
-                {navItems.map((item, index) =>
-                  item.active && (
-                    <Link
-                      key={index}
-                      to={item.slug}
-                      className={`block px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 focus:outline-none
-                      ${location.pathname === item.slug
-                        ? 'bg-gray-700 text-white shadow'
-                        : 'text-gray-300 hover:bg-gray-700/60'}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {item.name}
-                    </Link>
-                  )
-                )}
-                {authStatus && (
-                  <Link
-                    to="/profile"
-                    className="w-10 h-10 mx-auto mt-4 rounded-full bg-white text-gray-800 font-bold flex items-center justify-center shadow ring-2 ring-white hover:ring-4 transition-all duration-300"
-                    aria-label="Profile"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {avatar}
-                  </Link>
-                )}
-              </div>
-              <div
-                className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
-                onClick={() => setMobileMenuOpen(false)}
-                aria-hidden="true"
-              />
-            </>
-          )}
         </nav>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-gray-200 py-4 space-y-3">
+            {navItems.map((item, index) =>
+              item.active && (
+                <Link
+                  key={index}
+                  to={item.slug}
+                  className={`block text-sm font-medium transition-colors ${
+                    location.pathname === item.slug
+                      ? 'text-blue-600'
+                      : 'text-gray-600 hover:text-blue-600'
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              )
+            )}
+            
+            {authStatus ? (
+              <Link
+                to="/profile"
+                className="flex items-center gap-3 text-sm text-gray-600 hover:text-blue-600 transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <div className="w-8 h-8 rounded-full bg-blue-600 text-white font-medium flex items-center justify-center text-sm">
+                  {avatar}
+                </div>
+                Profile
+              </Link>
+            ) : (
+              <div className="pt-3 border-t border-gray-200 space-y-3">
+                <Link
+                  to="/login"
+                  className="block text-sm text-gray-600 hover:text-blue-600 transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className="block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors text-center"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
       </Container>
     </header>
   );

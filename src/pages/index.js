@@ -7,4 +7,5 @@ import SignUpPage from "./SignUpPage";
 import Profile from "./Profile";
 import AuthorPage from "./AuthorPage";
 import Verify from "./Verify";
-export {AddPost,EditPost,Home,LoginPage,Post,SignUpPage,Profile,AuthorPage,Verify}
+import AboutMe from "./AboutMe";
+export {AddPost,EditPost,Home,LoginPage,Post,SignUpPage,Profile,AuthorPage,Verify,AboutMe}

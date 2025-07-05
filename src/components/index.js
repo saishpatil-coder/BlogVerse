@@ -6,6 +6,7 @@ import PostCard from "./comps/PostCard";
 import RTE from "./comps/RTE";
 import Select from "./comps/Select";
 import SignUp from "./comps/SignUp";
+import UpdateUsernameForm from "./comps/UpdateUsernameForm";
 import Container from "./container/Container";
 import Footer from "./Footer/Footer";
 import Header from "./Header/Header";
@@ -37,6 +38,7 @@ export
     PostCard,
     Protected,
     Select,
-    SignUp
+    SignUp,
+    UpdateUsernameForm
 };
 

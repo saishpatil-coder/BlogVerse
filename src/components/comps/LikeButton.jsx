@@ -1,64 +1,87 @@
 import { useEffect, useState } from "react";
-import { HeartIcon as OutlineHeart } from '@heroicons/react/24/outline';
-import { HeartIcon as SolidHeart } from '@heroicons/react/24/solid';
-import { useSelector } from 'react-redux';
-import service from '../../appwrite/config'; // adjust as per your project
-import { toast } from "react-toastify";
+import { HeartIcon as OutlineHeart } from "@heroicons/react/24/outline";
+import { HeartIcon as SolidHeart } from "@heroicons/react/24/solid";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import service from "../../appwrite/config";
 
 export default function LikeButton({ postId }) {
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [animate, setAnimate] = useState(false);
+
   const user = useSelector((state) => state.auth.userData);
   const navigate = useNavigate();
-  useEffect(() => {
-    const fetchPost = async () => {
-      const post = await service.getPost(postId);
-      const likes = post.likedBy?.length || 0;
 
-      setLikes(likes || 0);
-      if (user) {
-        setLiked(post.likedBy?.includes(user.$id));
+  useEffect(() => {
+    const fetchLikes = async () => {
+      try {
+        const post = await service.getPost(postId);
+        setLikes(post.likedBy?.length || 0);
+        if (user) setLiked(post.likedBy?.includes(user.$id));
+      } catch (error) {
+        toast.error("Failed to fetch likes");
       }
     };
-    fetchPost();
+    fetchLikes();
   }, [postId, user]);
 
-  const handleLike = async () => {
+  const handleLike = async (e) => {
+    e.stopPropagation();
     if (!user) {
-      //give alert and when placed okay navigate to login page
-      alert("Please login to like a post");
+      toast.info("Please login to like posts.");
       navigate("/login");
       return;
     }
 
-    const updated = await service.likePost(postId, user.$id);
-    if (liked) {
-      setLikes((prev) => Math.max(prev - 1, 0));
-    } else {
-      setLikes((prev) => prev + 1);
+    if (loading) return;
+
+    setLoading(true);
+    try {
+      setLiked((prev) => !prev);
+      setLikes((prev) => (liked ? Math.max(prev - 1, 0) : prev + 1));
+      await service.likePost(postId, user.$id);
+
+
+      // Heart animation
+      setAnimate(true);
+      setTimeout(() => setAnimate(false), 500);
+
+      toast.success(liked ? "Removed like" : "Post liked!");
+    } catch (error) {
+      toast.error("Error updating like.");
     }
-    setLiked(!liked);
+    setLoading(false);
   };
 
   return (
     <button
-      onClick={(e) => {
-        e.stopPropagation();
-        handleLike(e);
-      }}
+      onClick={handleLike}
+      disabled={loading}
       className="flex items-center gap-1 px-2 py-1 rounded-full bg-white/80 hover:bg-white/90 backdrop-blur-sm shadow-md transition-all cursor-pointer"
-      aria-label={liked ? 'Unlike' : 'Like'}
+      aria-label={liked ? "Unlike" : "Like"}
     >
-      <span className="transition-transform duration-300 ease-in-out">
+      <span
+  className={`transition-transform duration-300 ease-in-out ${
+    animate ? "scale-125" : "scale-100"
+  }`}
+
+        title={liked ? "Unlike" : "Like"}
+      >
         {liked ? (
-          <SolidHeart className="w-5 h-5 text-red-500 group-hover:scale-110" />
+          <SolidHeart className="w-5 h-5 text-red-500" />
         ) : (
-          <OutlineHeart className="w-5 h-5 text-gray-600 group-hover:scale-110" />
+          <OutlineHeart className="w-5 h-5 text-gray-600" />
         )}
       </span>
-      <span className="text-xs font-medium text-gray-800">{likes}</span>
+      <span
+  className={`transition-transform duration-300 ease-in-out ${
+    animate ? "scale-125" : "scale-100"
+  }`}
+>
+{likes}</span>
     </button>
   );
-  
 }

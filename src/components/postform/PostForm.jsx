@@ -43,17 +43,23 @@ export default function PostForm({ post }) {
 
                 console.log("Updated Post : ", dbPost)
             } else {
-                const file = await service.uploadFile(data.image[0]);
+                let file ;
+                if (data.image[0]) {
+                    file = await service.uploadFile(data.image[0]);
+                }
+                else {
+                    file = null;
+                }
 
-                if (file) {
-                    const fileId = file.$id;
+        
+                    const fileId = file?.$id || null;
                     data.featuredImage = fileId;
                     const dbPost = await service.createPost({ ...data, userId: userData.$id, userName: userData.name });
                     console.log(data)
                     if (dbPost) {
                         navigate("/", { state: { message: "Post created successfully!" } });
                     }
-                }
+ 
             }
             setIsSubmitting(false);
         } catch (error) {
@@ -109,7 +115,7 @@ export default function PostForm({ post }) {
                     type="file"
                     className="mb-4"
                     accept="image/png, image/jpg, image/jpeg, image/gif"
-                    {...register("image", { required: !post })}
+                    {...register("image", { required: false })}
                 />
                 {post && (
                     <div className="w-full mb-4">
