@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { HeartIcon as OutlineHeart } from "@heroicons/react/24/outline";
-import { HeartIcon as SolidHeart } from "@heroicons/react/24/solid";
+import { BookmarkIcon as OutlineBookmark } from "@heroicons/react/24/outline";
+import { BookmarkIcon as SolidBookmark } from "@heroicons/react/24/solid";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import service from "../../appwrite/config";
-import { toggleLike } from "../../store/postSlice";
+import { toggleBookmark } from "../../store/postSlice";
 
-export default function LikeButton({ postId }) {
+export default function BookmarkButton({ postId }) {
   const [loading, setLoading] = useState(false);
   const [animate, setAnimate] = useState(false);
 
@@ -18,15 +18,14 @@ export default function LikeButton({ postId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Get like data from Redux store
-  const likedBy = post?.likedBy || [];
-  const likes = likedBy.length;
-  const isLiked = user ? likedBy.includes(user.$id) : false;
+  // Get bookmark data from Redux store
+  const bookmarkedUserId = post?.bookmarkedUserId || [];
+  const isBookmarked = user ? bookmarkedUserId.includes(user.$id) : false;
 
-  const handleLike = async (e) => {
+  const handleBookmark = async (e) => {
     e.stopPropagation();
     if (!user) {
-      toast.info("Please login to like posts.");
+      toast.info("Please login to bookmark posts.");
       navigate("/login");
       return;
     }
@@ -36,43 +35,43 @@ export default function LikeButton({ postId }) {
     setLoading(true);
     try {
       // Optimistically update UI
-      dispatch(toggleLike({ postId, userId: user.$id }));
+      dispatch(toggleBookmark({ postId, userId: user.$id }));
 
-      // Heart animation
+      // Bookmark animation
       setAnimate(true);
       setTimeout(() => setAnimate(false), 500);
 
       // Update backend
-      await service.likePost(postId, user.$id);
+      await service.bookmarkPost(postId, user.$id);
 
-      toast.success(isLiked ? "Removed like" : "Post liked!");
+      toast.success(isBookmarked ? "Removed from bookmarks" : "Post bookmarked!");
     } catch (error) {
       // Revert optimistic update on error
-      dispatch(toggleLike({ postId, userId: user.$id }));
-      toast.error("Error updating like.");
+      dispatch(toggleBookmark({ postId, userId: user.$id }));
+      toast.error("Error updating bookmark.");
     }
     setLoading(false);
   };
 
   return (
     <button
-      onClick={handleLike}
+      onClick={handleBookmark}
       disabled={loading}
       className="p-1 text-gray-600 hover:text-gray-800 transition-colors"
-      aria-label={isLiked ? "Unlike" : "Like"}
+      aria-label={isBookmarked ? "Remove bookmark" : "Bookmark"}
     >
       <span
         className={`transition-transform duration-300 ease-in-out ${
           animate ? "scale-125" : "scale-100"
         }`}
-        title={isLiked ? "Unlike" : "Like"}
+        title={isBookmarked ? "Remove bookmark" : "Bookmark"}
       >
-        {isLiked ? (
-          <SolidHeart className="w-6 h-6 text-red-500" />
+        {isBookmarked ? (
+          <SolidBookmark className="w-6 h-6 text-blue-600" />
         ) : (
-          <OutlineHeart className="w-6 h-6" />
+          <OutlineBookmark className="w-6 h-6" />
         )}
       </span>
     </button>
   );
-}
+} 

@@ -8,6 +8,7 @@ import { Protected } from './components'
 import {Home , LoginPage , SignUpPage , AddPost , EditPost , Post, Profile, AuthorPage, Verify, AboutMe} from "./pages"
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -80,8 +81,8 @@ const router = createBrowserRouter([
   },
 ])
 createRoot(document.getElementById('root')).render(
-    <Provider store={store}>
-      <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
-      <RouterProvider router={router}/>
-    </Provider>
+  <Provider store={store}>
+    <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
+    <RouterProvider router={router}/>
+  </Provider>
 )

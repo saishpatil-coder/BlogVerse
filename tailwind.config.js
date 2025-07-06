@@ -1,5 +1,6 @@
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx,html}'], // Ensure this is added
+  darkMode: 'class', // Enable dark mode with class strategy
   theme: {
     extend: {
       animation: {

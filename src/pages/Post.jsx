@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import service from "../appwrite/config";
-import { Button, Container } from "../components/index";
+import { Button, Container, ShareButton } from "../components/index";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
 
@@ -67,7 +67,10 @@ export default function Post()
                     )}
                 </div>
                 <div className="w-full mb-6">
-                    <h1 className="text-2xl font-bold">{post.title}</h1>
+                    <div className="flex items-center justify-between">
+                        <h1 className="text-2xl font-bold">{post.title}</h1>
+                        <ShareButton post={post} />
+                    </div>
                 </div>
                 <div className="browser-css">
                     {parse(post.content)}

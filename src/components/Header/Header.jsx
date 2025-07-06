@@ -13,19 +13,18 @@ export default function Header() {
 
   const navItems = [
     { name: 'Home', slug: '/', active: true },
-    { name: 'All Posts', slug: '/all-posts', active: true },
     { name: 'About', slug: '/about', active: true },
     { name: 'Add Post', slug: '/add-post', active: authStatus },
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <header className="sticky top-0 z-50 theme-bg-card theme-border border-b theme-shadow transition-colors duration-300">
       <Container>
         <nav className="flex items-center justify-between py-4">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
             <Logo width="32px" />
-            <span className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+            <span className="text-xl font-bold theme-text-primary group-hover:text-blue-600 transition-colors">
               MegaBlog
             </span>
           </Link>
@@ -40,7 +39,7 @@ export default function Header() {
                   className={`text-sm font-medium transition-colors ${
                     location.pathname === item.slug
                       ? 'text-blue-600'
-                      : 'text-gray-600 hover:text-blue-600'
+                      : 'theme-text-secondary hover:text-blue-600'
                   }`}
                 >
                   {item.name}
@@ -62,7 +61,7 @@ export default function Header() {
               <div className="flex items-center gap-3">
                 <Link
                   to="/login"
-                  className="text-sm text-gray-600 hover:text-blue-600 transition-colors"
+                  className="text-sm theme-text-secondary hover:text-blue-600 transition-colors"
                 >
                   Login
                 </Link>
@@ -77,19 +76,21 @@ export default function Header() {
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2 text-gray-600 hover:text-blue-600 transition-colors"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle navigation"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {mobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+          <div className="md:hidden flex items-center gap-2">
+            <button
+              className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle navigation"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {mobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
         </nav>
 
         {/* Mobile Menu */}

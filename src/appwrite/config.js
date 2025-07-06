@@ -56,6 +56,45 @@ export class Service {
         }
     }
 
+    // Check if the user has bookmarked the post
+    async hasUserBookmarked(postId, userId) {
+        const post = await this.databases.getDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, postId);
+        return post.bookmarkedUserId?.includes(userId);
+    }
+
+    // Bookmark or unbookmark post
+    async bookmarkPost(postId, userId) {
+        const post = await this.databases.getDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, postId);
+
+        if (post.bookmarkedUserId?.includes(userId)) {
+            // Unbookmark
+            const updatedBookmarkedUserId = post.bookmarkedUserId.filter(id => id !== userId);
+            return await this.databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, postId, {
+                bookmarkedUserId: updatedBookmarkedUserId,
+            });
+        } else {
+            // Bookmark
+            const updatedBookmarkedUserId = [...(post.bookmarkedUserId || []), userId];
+            return await this.databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, postId, {
+                bookmarkedUserId: updatedBookmarkedUserId,
+            });
+        }
+    }
+
+    // Get bookmarked posts for a user
+    async getBookmarkedPosts(userId) {
+        try {
+            return await this.databases.listDocuments(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionId,
+                [Query.equal("bookmarkedUserId", userId), Query.equal("status", "active")]
+            );
+        } catch (error) {
+            console.log("Appwrite service :: getBookmarkedPosts :: error", error);
+            return false;
+        }
+    }
+
     async deletePost({ slug }) {
         let documentId = slug
         try {

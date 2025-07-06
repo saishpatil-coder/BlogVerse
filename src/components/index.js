@@ -3,6 +3,8 @@ import Button from "./comps/Button";
 import Input from "./comps/Input";
 import Login from "./comps/Login";
 import PostCard from "./comps/PostCard";
+import BookmarkButton from "./comps/BookmarkButton";
+import ShareButton from "./comps/ShareButton";
 import RTE from "./comps/RTE";
 import Select from "./comps/Select";
 import SignUp from "./comps/SignUp";
@@ -28,6 +30,8 @@ export
     PostForm,
     RTE,
     Button,
+    BookmarkButton,
+    ShareButton,
     Container,
     Footer,
     Header,
