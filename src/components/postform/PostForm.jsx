@@ -69,12 +69,16 @@ export default function PostForm({ post }) {
     };
 
     const slugTransform = useCallback((value) => {
-        if (value && typeof value === "string")
-            return value
+        if (value && typeof value === "string") {
+            const transformed = value
                 .trim()
                 .toLowerCase()
                 .replace(/[^a-zA-Z\d\s]+/g, "-")
                 .replace(/\s/g, "-");
+            
+            // Limit to 36 characters to comply with Appwrite's document ID requirements
+            return transformed.length > 36 ? transformed.substring(0, 36) : transformed;
+        }
 
         return "";
     }, []);
