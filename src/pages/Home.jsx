@@ -19,7 +19,7 @@ function Home() {
         }
 
         // Only fetch posts if they're not already loaded
-        if (posts.length === 0 && !loading) {
+        if ((posts || []).length === 0 && !loading) {
             dispatch(setPostLoading(true));
             service.getPosts()
                 .then((response) => {
@@ -38,7 +38,7 @@ function Home() {
                     dispatch(setPostLoading(false));
                 });
         }
-    }, [dispatch, location.state?.message, posts.length, loading]);
+    }, [dispatch, location.state?.message, (posts || []).length, loading]);
 
     if (loading) {
         return (
@@ -50,7 +50,7 @@ function Home() {
         );
     }
 
-    if (posts.length === 0) {
+    if ((posts || []).length === 0) {
         return (
             <div className='w-full py-8 mt-4 text-center'>
                 <Container>

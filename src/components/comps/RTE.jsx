@@ -6,7 +6,7 @@ import { useState } from 'react';
 export default function RTE({ name, control, label, defaultValue = "" })
 {
     const [charCount, setCharCount] = useState(0);
-    const maxChars = 500;
+    const maxChars = 5000;
 
     const handleEditorChange = (content, onChange) => {
         // Remove HTML tags and count characters

@@ -24,7 +24,7 @@ export default function Footer() {
             <FaGithub />
           </a>
           <a
-            href="https://linkedin.com/in/saishpatil"
+            href="https://linkedin.com/in/saish-patil45"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-white transform hover:scale-125 transition duration-300"
@@ -33,7 +33,7 @@ export default function Footer() {
             <FaLinkedin />
           </a>
           <a
-            href="https://instagram.com/saishpatil"
+            href="https://instagram.com/its_saish_patil45"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-white transform hover:scale-125 transition duration-300"
